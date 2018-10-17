@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="static/index.css">
+	<script type="text/javascript">
+		function show(e) {
+			var index = e.options.selectedIndex;
+			if(index==2){
+				document.getElementsByClassName('search-box')[0].style.display='none';
+				document.getElementsByClassName('date')[0].style.display='inline-block';
+			}else{
+				document.getElementsByClassName('search-box')[0].style.display='inline-block';
+				document.getElementsByClassName('date')[0].style.display='none';
+			}
+		}
+		function loadmore() {
+			var xmlhttp;
+			if (window.XMLHttpRequest){// for IE7+, Firefox, Chrome, Opera, Safari
+			  	xmlhttp=new XMLHttpRequest();
+			}else{// for IE6, IE5
+				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			xmlhttp.onreadystatechange=function(){
+				if (xmlhttp.readyState==4 && xmlhttp.status==200){
+					var responseText = xmlhttp.responseText;
+					// responseText一般是json格式的
+					// 用js解析返回的json数据，添加到.list>ul>li
+				}
+			}
+			xmlhttp.open("GET","在这里写请求路径",true);
+			xmlhttp.send();
+		}
+
+	</script>
+</head>
+<body>
+	<div class="header">
+		<div class="wrap">
+			<span class="logo">IT之家数据助手</span>
+			<form action="/comment" method="post">
+				<input type="text" name="text" class="search-box" placeholder="请输入ID或昵称" />
+				<input type="date" name="date" class="date" />
+				<select name="" class="dropdown" onchange="show(this);">
+					<option value="" name="id">ID</option>
+					<option value="" name="nick">昵称</option>
+					<option value="" name="date">日期</option>
+				</select>
+				<input type="submit" value="搜索" class="btn" />
+			</form>
+		</div>
+	</div>
+	<div class="main">
+				
+		<div class="sort">
+			<ul>
+				<li>顺序:</li>
+				<li><a href="">id</a></li>
+				<li>
+					<a href="" class="active">
+						点赞
+					</a>
+				</li>
+				<li><a href="">反对</a></li>
+				<li><a href="">日期</a></li>
+			</ul>
+		</div>
+		<hr style="border-color: #fa0" />
+		<div class="list">
+			<ul>
+                {% for comment in infor %}
+                   <li>
+					<div class="info-left">
+						<img src="{{comment[0]}}" />
+						<p class="level">Lv.{{comment[1]}}</p>
+					</div>
+					<div class="info-right">
+
+						<p class="info-top">
+							<span class="nick">{{comment[2]}}</span>
+							<span class="device">{{comment[6]}}</span>
+							<span class="addr">IT之家{{comment[8]}}网友 {{comment[9]}}</span>
+							<span class="floor">{{comment[7]}}楼</span>
+						</p>
+						<p class="comment">
+							{{comment[3]}}
+						</p>
+						<p class="support">
+							<span class="yes">支持({{comment[4]}})</span>
+							<span class="no">反对({{comment[5]}})</span>
+						</p>
+						<hr style="border:0.3px dashed #9a8d7a;"/>
+					</div>
+				</li>
+                {% endfor%}
+
+			</ul>
+		</div>
+	</div>
+	<div class="loadmore" onclick="loadmore();">
+		加载更多
+	</div>
+</body>
+</html>
